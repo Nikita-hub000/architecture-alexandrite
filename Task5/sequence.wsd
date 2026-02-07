@@ -30,11 +30,10 @@ autonumber 1
 == Изменение статуса заказа ==
 User -> MES_UI: изменяет статус заказа
     MES_UI -> MES_API: запрос на изменение статуса заказа
-        MES_API -> Redis: запрос на изменение/сохранение данных в кеше
+        MES_API -> Redis: set status (write-through)
+            Redis -> DB: запись статуса в БД
+            Redis <-- DB: ok
         MES_API <-- Redis: ok
-
-        MES_API -> DB: запрос на запись
-        MES_API <-- DB: ok
 
     MES_UI <-- MES_API: ok
 User <-- MES_UI: ok
